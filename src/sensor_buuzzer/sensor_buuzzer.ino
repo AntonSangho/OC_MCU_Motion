@@ -14,8 +14,8 @@ void loop() {
     }
     filteredValue /= 100;
 
-    Serial.print(sensorValue);
-    Serial.print(",");
+    //Serial.print(sensorValue);
+    //Serial.print(",");
     Serial.println(filteredValue);
 
     if (filteredValue > 100) {
