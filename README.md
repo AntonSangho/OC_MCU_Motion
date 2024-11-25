@@ -1,69 +1,133 @@
-# 시계만들기 
+# 🎬 공학도서관 오리지널 컨텐츠
 
-[실시간 시계](https://ko.wikipedia.org/wiki/%EC%8B%A4%EC%8B%9C%EA%B0%84_%EC%8B%9C%EA%B3%84)의 개념을 활용해서 아두이노로 시계를 만들어볼 것이다.
+# 👀 사람 감지 센서 만들기
 
-
-![img](https://nerdytechy.com/wp-content/uploads/2021/02/arduino-rtc-5-1024x677.png)
-
-[![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCz5BOU9J9pB_O0B8-rDjCWQ?label=YouTube&style=social)](https://youtu.be/E6wkvTG2Ofs?si=k_IFc8MM8aGpZE7J)
-
-## 하드웨어 
-
-- 아두이노 우노  
-- SSD1306 OLED
-- DS3231 RTC module
-- CR2032 코인베터리
-- M-M 점퍼선 8개 
-- USB 2.0 케이블 Type A/B
+![img](./img/7_IRsensor_cover.jpg)
 
 
-**주의: 점퍼선 연결시 케이블을 제거하고 진행합니다.**
+## 📝 프로젝트 소개
+이 프로젝트는 적외선 센서와 피에조 부저를 활용하여 사람의 움직임을 감지하고 경고음을 울리는 장치를 만드는 과정을 설명합니다. 센서값 필터링을 통해 안정적으로 동작하는 감지 시스템을 직접 만들어볼 수 있습니다.
 
-### 선 작업 
-#### 회로도
-![img](/ppt/img/RTC_Arduino_fritzing.png)
-#### 핀 정보
-| [Arduino UNO GPIO](https://docs.arduino.cc/resources/pinouts/A000066-full-pinout.pdf) | DS3231 |
-|-----------|------|
-|   D19     | SCL  |
-|   D18     | SDA  |
-|   5V      | VCC  |
-|   GND     | GND  |
+## 📚 사전학습
+이 프로젝트를 시작하기 전에 아래 내용을 먼저 공부하고 오시면 좋아요.
 
-| [Arduino UNO GPIO](https://docs.arduino.cc/resources/pinouts/A000066-full-pinout.pdf) | SSD1306 |
-|-----------|------|
-|   D19     | SCL  |
-|   D18     | SDA  |
-|   5V      | VCC  |
-|   GND     | GND  |
+- 아두이노 기초
+  - 아두이노 IDE 설치하기
+  - analogRead() 함수 이해하기
+  - 배열 활용법 알아보기
 
-### 구입처 
+- 센서 다루기
+  - 적외선 센서의 원리 이해하기
+  - 아날로그 신호 읽는 방법 알아보기
+  - 센서 데이터 필터링 방법 이해하기
 
-The stl files for an enclosure are on thingiverse [here](https://www.thingiverse.com/thing:6125748) (Thanks Ryan!).
+- 프로그래밍 기초
+  - 배열을 이용한 데이터 처리
+  - 평균값 계산하기
+  - 반복문 활용하기
 
-## 순서도
-[![](https://mermaid.ink/img/pako:eNptUj9PwkAU_yqXNxdCS8H2BhIDDiYaE3UyXRp6QhO4YmkTkZA4EEPEgQEjGiAMGBdNUMC4-IW44zt40BIVuKG9e78_92vfq0LWsQhgKJMLn9AsydhmzjWLBkVilUzXs7N2yaQe2nUt36bOJnB8mt4sHh3sZQwa1INnqI-kUkKA0b6SRvObKW8O1uGF9C-OVj5rDvNOnfdfEW92Z6M64oN7Np6I1zXvPwd8wRLcUIUXR8QfWiGFtbrr0t737Gu0uqzgOCUk80mDvTRYc4jYqMPG061BlsaB1Wz0vkjMn9r8421riv-phev8sbP9D7B2m98O5-07Nmjw3mQZPQz82WWD8CMJtQwKEhSJWzRtS3SyugAM8PKkSAzAYluwc17eAIPWBNH0PeekQrOAPdcnEvgly_RWbQd8bhbKokos23Pcw2A2liMigWjsmeP8csQZcBUuAcu6HtU0VdUUNSkruqJrElQAR2RZjcoJRY8lkrqaVNX4Tk2Cq6WHHI3H5ZhYWjKhJgRa-wEsOP1j?type=png)](https://mermaid.live/edit#pako:eNptUj9PwkAU_yqXNxdCS8H2BhIDDiYaE3UyXRp6QhO4YmkTkZA4EEPEgQEjGiAMGBdNUMC4-IW44zt40BIVuKG9e78_92vfq0LWsQhgKJMLn9AsydhmzjWLBkVilUzXs7N2yaQe2nUt36bOJnB8mt4sHh3sZQwa1INnqI-kUkKA0b6SRvObKW8O1uGF9C-OVj5rDvNOnfdfEW92Z6M64oN7Np6I1zXvPwd8wRLcUIUXR8QfWiGFtbrr0t737Gu0uqzgOCUk80mDvTRYc4jYqMPG061BlsaB1Wz0vkjMn9r8421riv-phev8sbP9D7B2m98O5-07Nmjw3mQZPQz82WWD8CMJtQwKEhSJWzRtS3SyugAM8PKkSAzAYluwc17eAIPWBNH0PeekQrOAPdcnEvgly_RWbQd8bhbKokos23Pcw2A2liMigWjsmeP8csQZcBUuAcu6HtU0VdUUNSkruqJrElQAR2RZjcoJRY8lkrqaVNX4Tk2Cq6WHHI3H5ZhYWjKhJgRa-wEsOP1j)
+## 🎯 성취 목표
+- 적외선 센서에서 거리 데이터를 읽어올 수 있다.
+- 센서 데이터를 필터링하여 안정적인 값을 얻을 수 있다.
+- 특정 거리 이상일 때 경고음이 울리도록 할 수 있다.
+- 이동 평균 필터를 구현할 수 있다.
+- 아날로그 센서값을 활용할 수 있다.
 
+## 🛠 준비물
+- 아두이노 우노 보드
+- 적외선 센서
+- 피에조 부저
+- 브레드보드
+- 점퍼선
+- USB 케이블
 
-## 라이브러리  
-- [RTCLib](https://github.com/adafruit/RTClib?tab=readme-ov-file)  
-    : Adafruit사에서 만든 아두이노의 기본 RTC 기능에 대한 라이브러리입니다. DS1307, DS3231 및 PCF8523 지원됩니다.   
-- [Adafruit-SSD1306](https://github.com/adafruit/Adafruit_SSD1306)  
-    : Adafruit사에서 만든 SSD1306을 위한 라이브러리. 로고가 안보이도록 하려면 몇가지 [수정](https://www.youtube.com/watch?v=0xcp01De9so)이 필요하다.
-### uRTCLib의 주요 기능 
-1. rtc.set()
-2. rtc.refresh() 
+## 📋 회로 연결 방법
 
-### Adafuit_SSD1306의 주요 기능  
-1. display.display()
-2. display.cleardisplay()
+### 적외선 센서 연결
+| Arduino UNO | 적외선 센서 |
+|------------|------------|
+| A0         | OUT(노란색) |
+| 5V         | VCC(빨간색) |
+| GND        | GND(검정색) |
 
-## 응용하기  
-1. D-day 기능 만들기: 굉장히 오래 전부터 지금까지에 대한 시간
-2. Alarm 기능 만들기: 10초 후에 뭔가 발생하는 것 만들기 
+### 피에조 부저 연결
+| Arduino UNO | 피에조 부저 |
+|------------|------------|
+| 12         | I/O        |
+| 3.3V       | VCC        |
+| GND        | GND        |
 
-## 참고한 자료 
+> **주의**: 센서와 부저의 극성에 주의하여 연결하세요!
 
+## 💾 실습 코드
+| 파일명 | 설명 |
+|--------|------|
+| [filter2.ino](./src/filter2/filter2.ino) | 움직임 감지 및 필터링 코드 |
 
+## 💻 주요 함수 설명
+1. `analogRead(A0)`
+   - 적외선 센서의 거리값 읽기
+   - 0-1023 범위의 아날로그 값 반환
 
+2. 이동 평균 필터
+   ```cpp
+   float filteredValue;
+   for (int i = 0; i < num; i++) {
+       filteredValue += sensorValues[i];
+   }
+   filteredValue /= num;
+   ```
 
+## ➡️ 순서도
+
+![flowchart](./img/7_IRsensor_flowchart.png)
+
+1. 센서값 배열 한 칸씩 이동 ➡️ 
+2. 새로운 센서값 읽기 ➡️ 
+3. 20개 값의 평균 계산 ➡️ 
+4. 임계값 비교 후 부저 제어
+
+## 🚀 시작하기
+1. 회로를 제시된 대로 연결
+   - 센서 핀 연결 확인
+   - 부저 극성 확인
+
+2. 코드 업로드 준비
+   - 아두이노 IDE 실행
+   - 포트 선택
+
+3. 코드 업로드하기
+   - 코드 검증
+   - 업로드 진행
+
+4. 동작 테스트
+   - 시리얼 모니터로 센서값 확인
+   - 필터링된 값 확인
+   - 거리에 따른 부저 동작 테스트
+
+## 🔍 문제해결
+- 센서값이 불안정해요
+  - 센서 주변의 빛 환경을 확인해보세요.
+  - 필터링 샘플 수(num)를 늘려보세요.
+
+- 부저 소리가 안나요
+  - 부저의 전원 연결을 확인해보세요.
+  - 코드의 임계값을 조정해보세요.
+
+- 너무 민감하게 반응해요
+  - 임계값을 높여보세요.
+  - 필터링 샘플 수를 늘려보세요.
+
+## 🌟 이렇게 업그레이드 해볼 수 있어요
+- LED 경고등을 추가해볼까요?
+  소리와 함께 시각적 경고도 줄 수 있어요.
+
+- 거리에 따라 다른 소리를 내볼까요?
+  가까우면 높은 음, 멀면 낮은 음을 내도록 할 수 있어요.
+
+- 기록 기능을 추가해볼까요?
+  움직임이 감지된 시간을 기록하도록 만들 수 있어요.
+
+## 📚 참고 자료
+- [적외선 센서의 원리](https://www.arduino.cc/reference/en/language/functions/analog-io/analogread/)
+- [이동 평균 필터 설명](https://www.arduino.cc/reference/en/language/structure/control-structure/for/)
