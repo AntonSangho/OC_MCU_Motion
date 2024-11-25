@@ -80,7 +80,7 @@
 
 ## ➡️ 순서도
 
-![flowchart](./img/7_IRsensor_flowchart.png)
+![flowchart](./img/7_IRsensor_flowchart.jpg)
 
 1. 센서값 배열 한 칸씩 이동 ➡️ 
 2. 새로운 센서값 읽기 ➡️ 
